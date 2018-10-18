@@ -1,0 +1,4 @@
+* libsqlite3.so
+* libmysqlcppcon.so.7
+
+* libssl.1.0.2

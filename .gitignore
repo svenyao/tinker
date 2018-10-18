@@ -1,0 +1,51 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.exp
+*.ilk
+*.pdb
+*.log
+*.tlog
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+#*.so
+*.dylib
+#*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+#*.a
+#*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Directory
+.idea/
+.vscode/
+.vs/
+build/
+bin/
+msvc*/
+cmake-build-debug/
+/[Dd]ebug/*
+/[Rr]elease/*
+/out32/*
+/out64/*
+/lib/*

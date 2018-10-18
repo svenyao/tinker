@@ -1,0 +1,5 @@
+# libscom
+
+simple component library
+
+

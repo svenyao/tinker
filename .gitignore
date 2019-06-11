@@ -49,3 +49,4 @@ cmake-build-debug/
 /out32/*
 /out64/*
 /lib/*
+tests/

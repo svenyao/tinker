@@ -9,7 +9,7 @@
  * file. If not, please write to: admin@hongkingsystem.cn,
  * or visit: http://hongkingsystem.cn
  */
-#include "tgw_crypto.h"
+#include "fgs_crypto.h"
 
 #ifdef WIN32
 #include <string>
@@ -17,10 +17,10 @@
 #include <windows.h>
 #include <winioctl.h>
 #include <iphlpapi.h>
-#pragma comment(lib, "iphlpapi.lib")
 #if _MSC_VER >=1400    // VC2005才支持intrin.h
 #include <intrin.h>    // 所有Intrinsics函数
 #endif
+#pragma comment(lib, "iphlpapi.lib")
 #else
 #include <stdio.h>
 #include <unistd.h>
@@ -32,14 +32,9 @@
 #include <netinet/in.h>
 #include <net/if.h>
 #include <linux/hdreg.h>
-#endif
-
-#ifndef WIN32
-#include <netinet/in.h>
 # ifdef _XOPEN_SOURCE_EXTENDED
 #  include <arpa/inet.h>
 # endif
-#include <sys/socket.h>
 #endif
 
 namespace tinker {
@@ -556,23 +551,6 @@ int get_ip(std::string& ip) {
   return 0;
 #else
   // win32
-  WSADATA wsaData;
-  if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-    WSACleanup();
-    return -1;
-  }
-  char local[255] = { 0 };
-  gethostname(local, sizeof(local));
-  hostent* ph = gethostbyname(local);
-  if (ph == NULL) {
-    WSACleanup();
-    return -1;
-  }
-  in_addr addr;
-  memcpy(&addr, ph->h_addr_list[0], sizeof(in_addr)); // 这里仅获取第一个ip  
-  ip.assign(inet_ntoa(addr));
-
-  WSACleanup();
 #endif
   return 0;
 }

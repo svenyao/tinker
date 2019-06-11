@@ -9,7 +9,7 @@ endif()
 
 # build tgw_crypto .so/.a
 set(SOURCE_FILES tgw_crypto.cpp hardware_util.cpp tgw_crypto.h)
-add_library(tgw_crypto SHARED ${SOURCE_FILES})
+add_library(tgw_crypto ${SOURCE_FILES})
 if(UNIX)
 target_link_libraries(tgw_crypto crypto.a dl)
 else()

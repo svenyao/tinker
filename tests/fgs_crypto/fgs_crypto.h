@@ -3,6 +3,7 @@
 //
 #ifndef FGS_TGW_CRYPTO_H
 #define FGS_TGW_CRYPTO_H
+#include "crypto.h"
 #include <string>
 
 namespace tinker {

@@ -497,28 +497,19 @@ out:
 
 
 RSACrypto::RSACrypto()
-  : rsa_(NULL), bn_n_(NULL), bn_e_(NULL), bn_d_(NULL)
+  : rsa_(NULL)
 {
   rsa_ = RSA_new();
-
-  bn_n_ = BN_new();
-  bn_e_ = BN_new();
-  bn_d_ = BN_new();
 }
 
 RSACrypto::~RSACrypto()
 {
   RSA_free(rsa_);
-
-  BN_free(bn_n_);
-  BN_free(bn_e_);
-  BN_free(bn_d_);
 }
 
 int RSACrypto::GenRSA(int bits)
 {
   bignum_st* bn_e = BN_new();
-  //BN_init(&bne);
   BN_set_word(bn_e, RSA_F4);
   int ret = RSA_generate_key_ex(rsa_, bits, bn_e, NULL);
   BN_free(bn_e);
@@ -533,58 +524,67 @@ int RSACrypto::RSASize() const
 void RSACrypto::Reset()
 {
   RSA_free(rsa_);
-  BN_free(bn_n_);
-  BN_free(bn_e_);
-  BN_free(bn_d_);
   rsa_ = RSA_new();
-  bn_n_ = BN_new();
-  bn_e_ = BN_new();
-  bn_d_ = BN_new();
 }
 
 bool RSACrypto::IsPublicKey() const
 {
-  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n_, (const BIGNUM**)&bn_e_, (const BIGNUM**)&bn_d_);
-  return (bn_n_ && bn_e_);
+  bignum_st* bn_n;
+  bignum_st* bn_e;
+  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n, (const BIGNUM**)&bn_e, NULL);
+  return (bn_n && bn_e);
 }
 
 bool RSACrypto::IsPrivateKey() const
 {
-  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n_, (const BIGNUM**)&bn_e_, (const BIGNUM**)&bn_d_);
+  bignum_st* bn_n;
+  bignum_st* bn_e;
+  bignum_st* bn_d;
+  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n, (const BIGNUM**)&bn_e, (const BIGNUM**)&bn_d);
 
-  return (bn_n_ && bn_e_ && bn_d_);
+  return (bn_n && bn_e && bn_d);
 }
 
 void RSACrypto::GetPublicKey(std::string& n, std::string& e, BNStringType type) const
 {
-  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n_, (const BIGNUM**)&bn_e_, (const BIGNUM**)&bn_d_);
-  BN2String(bn_n_, n, type);
-  BN2String(bn_e_, e, type);
+  bignum_st* bn_n;
+  bignum_st* bn_e;
+  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n, (const BIGNUM**)&bn_e, NULL);
+  BN2String(bn_n, n, type);
+  BN2String(bn_e, e, type);
 }
 
 void RSACrypto::GetPrivateKey(std::string& n, std::string& e, std::string& d, BNStringType type) const
 {
-  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n_, (const BIGNUM**)&bn_e_, (const BIGNUM**)&bn_d_);
-  BN2String(bn_n_, n, type);
-  BN2String(bn_e_, e, type);
-  BN2String(bn_d_, d, type);
+  bignum_st* bn_n;
+  bignum_st* bn_e;
+  bignum_st* bn_d;
+  RSA_get0_key(rsa_, (const BIGNUM**)&bn_n, (const BIGNUM**)&bn_e, (const BIGNUM**)&bn_d);
+  BN2String(bn_n, n, type);
+  BN2String(bn_e, e, type);
+  BN2String(bn_d, d, type);
 }
 
 void RSACrypto::SetPublicKey(const std::string& n, const std::string& e, BNStringType type)
 {
-  String2BN(n, &bn_n_, type);
-  String2BN(e, &bn_e_, type);
+  bignum_st* bn_n;
+  bignum_st* bn_e;
+  String2BN(n, &bn_n, type);
+  String2BN(e, &bn_e, type);
 
-  RSA_set0_key(rsa_, bn_n_, bn_e_, NULL);
+  RSA_set0_key(rsa_, bn_n, bn_e, NULL);
 }
 
 void RSACrypto::SetPrivateKey(const std::string& n, const std::string& e, const std::string& d, BNStringType type)
 {
-  String2BN(n, &bn_n_, type);
-  String2BN(e, &bn_e_, type);
-  String2BN(d, &bn_d_, type);
+  bignum_st* bn_n;
+  bignum_st* bn_e;
+  bignum_st* bn_d;
+  String2BN(n, &bn_n, type);
+  String2BN(e, &bn_e, type);
+  String2BN(d, &bn_d, type);
 
-  RSA_set0_key(rsa_, bn_n_, bn_e_, bn_d_);
+  RSA_set0_key(rsa_, bn_n, bn_e, bn_d);
 }
 
 int RSACrypto::PublicEncrypt(const std::string& instr, std::string& outstr) const

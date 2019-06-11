@@ -134,9 +134,6 @@ private:
   void operator=(const RSACrypto&);
 
   rsa_st* rsa_;
-  bignum_st* bn_n_;
-  bignum_st* bn_e_;
-  bignum_st* bn_d_;
 };
 
 class TINKER_API DigestSign{

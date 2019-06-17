@@ -198,6 +198,7 @@ bool GetIDEHDSerial(int driveNum, std::string& serialNum) {
           }
           serialNum = szSeq;
           serialNum.erase(0, serialNum.find_first_not_of(" "));
+          serialNum.erase(serialNum.find_first_of(" "), std::string::npos);
           bFlag = true;  // 读取硬盘信息成功
         }
       }
@@ -249,6 +250,7 @@ bool GetSCSIHDSerial(int driveNum, std::string& serialNum) {
           }
           serialNum = szSeq;
           serialNum.erase(0, serialNum.find_first_not_of(" "));
+          serialNum.erase(serialNum.find_first_of(" "), std::string::npos);
           bFlag = true;  // 读取硬盘信息成功
           break;
         }
